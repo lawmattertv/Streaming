@@ -7,12 +7,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #000; /* Fond noir pour simuler un écran de TV */
+            background-color: #000; /* Fond noir */
             color: #fff; /* Couleur de texte blanc */
             margin: 0;
             padding: 0;
-            position: relative; /* Nécessaire pour positionner des éléments enfants */
-            overflow: hidden; /* Pour éviter le débordement */
+            position: relative;
+            overflow: hidden; /* Pour éviter les débordements */
         }
 
         .header {
@@ -21,11 +21,6 @@
             align-items: center;
             padding: 20px;
             background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
-        }
-
-        .logo {
-            width: 50px; /* Ajustez la taille de votre logo */
-            margin-right: 10px; /* Espacement entre le logo et le nom */
         }
 
         .site-name {
@@ -45,163 +40,69 @@
             position: absolute;
             top: 10px; /* Positionné en haut à droite */
             right: 20px;
-            font-size: 16px; /* Petite taille de police */
-            z-index: 10; /* S'assurer que l'heure est au-dessus de la vidéo */
-            color: #fff; /* Couleur de l'heure */
-        }
-
-        .overlay-logo {
-            position: absolute;
-            top: 10px; /* Positionné au-dessus de l'heure */
-            left: 20px; /* Décalé vers la gauche */
-            z-index: 10; /* S'assurer que le logo est au-dessus de la vidéo */
-            width: 50px; /* Ajustez la taille de votre logo */
-            height: auto; /* Hauteur automatique */
+            font-size: 16px;
+            z-index: 10;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.7); /* Fond noir semi-transparent */
+            padding: 5px;
+            border-radius: 5px;
         }
 
         .direct-text {
             position: absolute;
-            top: 10px; /* Positionné en haut à gauche */
-            left: 20px; /* Décalé vers la gauche */
-            background-color: rgba(255, 255, 0, 0.8); /* Fond jaune semi-transparent */
-            color: #000; /* Couleur du texte */
-            padding: 5px; /* Espacement autour du texte */
-            border-radius: 5px; /* Bords arrondis */
-            font-weight: bold; /* Texte en gras */
-            z-index: 10; /* S'assurer que le texte est au-dessus de la vidéo */
-        }
-
-        .marquee {
-            position: absolute;
-            bottom: 0; /* Positionné en bas de l'écran */
-            left: 0;
-            width: 100%;
-            color: #fff; /* Texte blanc */
-            white-space: nowrap;
-            overflow: hidden;
-            display: none; /* Masquer par défaut */
-            z-index: 10; /* S'assurer que la bannière est au-dessus de la vidéo */
-            font-size: 12px; /* Taille de police pour la bannière */
-            font-weight: lighter; /* Texte fin */
-        }
-
-        .marquee p {
-            display: inline-block;
-            padding: 10px 0;
-            animation: marquee 10s linear infinite; /* Durée de défilement */
-        }
-
-        @keyframes marquee {
-            from {
-                transform: translateX(100%); /* Début à droite */
-            }
-            to {
-                transform: translateX(-100%); /* Fin à gauche */
-            }
+            top: 10px; 
+            left: 20px; 
+            background-color: rgba(255, 0, 0, 0.8); /* Fond rouge semi-transparent */
+            color: #fff; 
+            padding: 5px; 
+            border-radius: 5px; 
+            font-weight: bold;
+            z-index: 10;
         }
 
         /* Styles pour le lecteur vidéo */
         iframe {
-            width: 100%; /* Largeur du lecteur vidéo */
-            height: auto; /* Hauteur automatique pour le ratio 16:9 */
-            aspect-ratio: 16 / 9; /* Ratio 16:9 */
-            border: none; /* Pas de bordure pour l'iframe */
-            z-index: 1; /* S'assurer que le lecteur est en arrière-plan */
-        }
-
-        /* Bouton pour afficher/masquer la bannière */
-        .toggle-button {
-            background-color: yellow; /* Couleur de fond jaune */
-            color: black; /* Couleur de texte noir */
-            border: none; /* Pas de bordure */
-            padding: 10px 20px; /* Espacement */
-            border-radius: 5px; /* Bords arrondis */
-            cursor: pointer; /* Curseur pointer */
-            z-index: 10; /* S'assurer que le bouton est au-dessus de la vidéo */
-            position: relative; /* Positionnement relatif pour le z-index */
-            margin: 10px; /* Marge autour du bouton */
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            border: none;
+            z-index: 1;
         }
 
         .copyright {
             text-align: center;
-            font-size: 12px; /* Petite taille de police pour le copyright */
-            margin-top: 20px; /* Marge au-dessus du copyright */
+            font-size: 12px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <img src="/storage/emulated/0/Pictures/Cuts/CutPaste_2024-10-06_18-38-50-837.png" alt="Logo" class="logo"> <!-- Votre logo -->
         <div class="site-name">Law Matter TV</div> <!-- Nom du site -->
     </div>
 
     <div class="video-player">
-        <iframe id="videoPlayer" src="" allowfullscreen></iframe>
-        <div class="clock" id="clock">'https://youtube.com/playlist?list=PLKjjURZYdaOArKe7D9AU45x-DjGjXm-hn&si=WJdmuv4X3m8XPiNe' </div> <!-- Affichage de l'heure -->
-        
+        <iframe id="videoPlayer" 
+                src="https://www.youtube.com/embed/?listType=playlist&list=PLKjjURZYdaOArKe7D9AU45x-DjGjXm-hn&autoplay=1&shuffle=1&loop=1&mute=0&vq=hd2160" 
+                allow="autoplay" 
+                allowfullscreen></iframe> <!-- Lecture aléatoire avec autoplay et shuffle activés -->
+        <div class="clock" id="clock"></div> <!-- Affichage de l'heure -->
         <div class="direct-text" id="directText">Direct</div> <!-- Texte "Direct" -->
-        <div class="marquee" id="banner">
-            <p>Banner 1 - Information juridique importante | Banner 2 - Consultez notre site pour plus de détails | Banner 3 - Événement à venir !</p>
-        </div>
     </div>
-
-    <!-- Bouton pour afficher/masquer la bannière -->
-    <button class="toggle-button" id="toggleBanner">Afficher la Bannière</button>
 
     <div class="copyright">
         &copy; 2024 Law Matter TV. Tous droits réservés.
     </div>
 
     <script>
-        const videoLinks = [
-         'https://youtube.com/playlist?list=PLKjjURZYdaOArKe7D9AU45x-DjGjXm-hn&si=RJSBGSaMkGkEOJYK', // Remplacez par le chemin de votre vidéo locale
-           
-        ];
-
-        let currentVideoIndex = 0;
-        const videoDuration = 10; // Durée de chaque vidéo en secondes avant de passer à la suivante
-
-        function loadVideo() {
-            const player = document.getElementById('videoPlayer');
-            player.src = videoLinks[currentVideoIndex];
-            
-            // Passer à la prochaine vidéo après la durée définie
-            setTimeout(nextVideo, videoDuration * 1000); // Convertir en millisecondes
-        }
-
-        function nextVideo() {
-            currentVideoIndex = (currentVideoIndex + 1) % videoLinks.length;
-            loadVideo();
-        }
-
-        // Charger la première vidéo au démarrage
-        loadVideo();
-
         // Afficher l'heure actuelle
         function updateClock() {
             const now = new Date();
-            const options = { hour: '2-digit', minute: '2-digit' }; // Supprimer les secondes
+            const options = { hour: '2-digit', minute: '2-digit' };
             document.getElementById('clock').textContent = now.toLocaleTimeString([], options);
         }
         
         setInterval(updateClock, 1000); // Mettre à jour l'heure chaque seconde
-
-        // Fonction pour afficher/masquer la bannière
-        function toggleBanner() {
-            const banner = document.getElementById('banner');
-            const button = document.getElementById('toggleBanner');
-            if (banner.style.display === 'none' || banner.style.display === '') {
-                banner.style.display = 'block';
-                button.textContent = 'Masquer la Bannière'; // Changer le texte du bouton
-            } else {
-                banner.style.display = 'none';
-                button.textContent = 'Afficher la Bannière'; // Changer le texte du bouton
-            }
-        }
-
-        // Exemple d'utilisation : afficher la bannière après 5 secondes
-        setTimeout(toggleBanner, 5000); // Masquer la bannière par défaut, puis l'afficher
     </script>
 </body>
 </html>
-  
