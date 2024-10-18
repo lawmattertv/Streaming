@@ -107,18 +107,13 @@
                 allow="autoplay; fullscreen; picture-in-picture; encrypted-media" 
                 allowfullscreen></iframe>
         <div class="clock" id="clock"></div>
-        <div class="direct-text" id="directText">Direct</div>
+        <div class="direct-text" id="directText">TV⚖️</div>
     </div>
 
     <div class="actions">
         <!-- Icône plein écran -->
         <button class="icon-button" onclick="toggleFullScreen()">
             <i class="fas fa-expand"></i>
-        </button>
-        
-        <!-- Icône pour faire un Cast vers un TV -->
-        <button class="icon-button" onclick="castToTV()">
-            <i class="fas fa-tv"></i>
         </button>
 
         <!-- Icône pour partager la diffusion -->
@@ -144,27 +139,6 @@
             }
         }
 
-        // Fonction pour caster la vidéo sur une TV
-        function castToTV() {
-            const video = document.getElementById('videoPlayer');
-            if ('cast' in window) {
-                const castSession = window.cast.framework.CastContext.getInstance().getCurrentSession();
-                if (castSession) {
-                    const mediaInfo = new chrome.cast.media.MediaInfo(video.src, 'video/mp4');
-                    const request = new chrome.cast.media.LoadRequest(mediaInfo);
-                    castSession.loadMedia(request).then(() => {
-                        console.log("Casting en cours...");
-                    }).catch((err) => {
-                        console.error("Erreur de cast : ", err);
-                    });
-                } else {
-                    alert("Aucun appareil disponible pour caster.");
-                }
-            } else {
-                alert("Votre navigateur ne supporte pas la fonction cast.");
-            }
-        }
-
         // Fonction pour partager le lien de la diffusion
         function shareLink() {
             const url = window.location.href;
@@ -184,34 +158,39 @@
 
         setInterval(updateClock, 1000); // Mettre à jour l'heure chaque seconde
 
-        // Grille horaire pour les vidéos
+        // Grille horaire pour les vidéos programmées (hebdomadaire/mensuelle)
+        const weeklySchedule = {
+            "Monday": [
+                { time: "10:00", videoId: "VIDEO_ID1" },
+                { time: "12:00", videoId: "VIDEO_ID2" }
+            ],
+            "Tuesday": [
+                { time: "10:00", videoId: "VIDEO_ID3" },
+                { time: "14:00", videoId: "VIDEO_ID4" }
+            ],
+            // Ajoutez des jours supplémentaires et leurs horaires ici
+        };
+
         function getVideoForCurrentTime() {
             const now = new Date();
-            const hours = now.getHours();
+            const day = now.toLocaleString('en-US', { weekday: 'long' });
+            const currentTime = now.toTimeString().slice(0, 5); // Format HH:MM
 
-            let videoURL;
-
-            // Programme horaire : modifiez ces plages avec vos URL de vidéos
-            if (hours >= 10 && hours < 12) {
-                videoURL = "https://www.youtube.com/embed/VIDEO_ID1"; // Vidéo du matin
-            } else if (hours >= 12 && hours < 14) {
-                videoURL = "https://www.youtube.com/embed/VIDEO_ID2"; // Vidéo de midi
-            } else if (hours >= 14 && hours < 16) {
-                videoURL = "https://www.youtube.com/embed/VIDEO_ID3"; // Vidéo de l'après-midi
-            } else {
-                videoURL = "https://www.youtube.com/embed/?listType=playlist&list=PLKjjURZYdaOArKe7D9AU45x-DjGjXm-hn&autoplay=1&shuffle=1&loop=1&vq=hd2160"; // Playlist par défaut
+            if (weeklySchedule[day]) {
+                const scheduleForToday = weeklySchedule[day];
+                for (let program of scheduleForToday) {
+                    if (program.time === currentTime) {
+                        const videoURL = `https://www.youtube.com/embed/${program.videoId}?autoplay=1&vq=hd2160`;
+                        document.getElementById("videoPlayer").src = videoURL;
+                        break;
+                    }
+                }
             }
-
-            document.getElementById("videoPlayer").src = videoURL;
         }
 
         // Vérification de l'heure pour changer de vidéo chaque minute
         setInterval(getVideoForCurrentTime, 60000); // Chaque minute
         getVideoForCurrentTime(); // Vérification initiale au chargement
     </script>
-
-    <!-- Script pour activer le casting si disponible -->
-    <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
-
 </body>
 </html>
