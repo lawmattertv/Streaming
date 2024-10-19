@@ -53,7 +53,7 @@
             position: absolute;
             top: 10px;
             left: 20px;
-            background-color: rgba(255, 0, 0, 0.8);
+            background-color: rgba(255, 105, 180, 1);
             color: #fff;
             padding: 5px;
             border-radius: 5px;
@@ -89,6 +89,38 @@
             color: #ddd;
         }
 
+        .small-buttons {
+            display: flex;
+            justify-content: space-evenly;
+            margin: 20px 0;
+        }
+
+        .small-button {
+            background-color: #FFD700; /* Jaune */
+            color: #000; /* Écriture noire */
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 12px; /* Texte plus petit */
+            cursor: pointer;
+            margin: 0 5px;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .small-button span {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .small-button i {
+            opacity: 0;
+            margin-left: 5px;
+            transition: opacity 0.6s ease;
+        }
+
         .copyright {
             text-align: center;
             font-size: 12px;
@@ -103,11 +135,10 @@
 
     <div class="video-player">
         <iframe id="videoPlayer" 
-                src="https://www.youtube.com/embed/?listType=playlist&list=PLKjjURZYdaOArKe7D9AU45x-DjGjXm-hn&autoplay=1&shuffle=1&loop=1&vq=hd2160" 
                 allow="autoplay; fullscreen; picture-in-picture; encrypted-media" 
                 allowfullscreen></iframe>
         <div class="clock" id="clock"></div>
-        <div class="direct-text" id="directText">TV⚖️</div>
+        <div class="direct-text" id="directText">TV⚖️🎗️</div>
     </div>
 
     <div class="actions">
@@ -119,6 +150,26 @@
         <!-- Icône pour partager la diffusion -->
         <button class="icon-button" onclick="shareLink()">
             <i class="fas fa-share-alt"></i>
+        </button>
+    </div>
+
+    <div class="small-buttons">
+        <!-- Boutons stylisés et animés automatiquement -->
+        <button class="small-button" id="btn1" onclick="window.open('https://me.lygosapp.com/buy/LawMatter_store', '_blank')">
+            <span>Fait un don</span>
+            <i class="fas fa-hand-holding-usd"></i>
+        </button>
+        <button class="small-button" id="btn2" onclick="window.open('https://wa.me/2250143692215?text=J%27aimerais%20en%20savoir%20davantage%20sur%20le%20droit%20de%20diffusion%20d%27une%20publicité%20sur%20votre%20chaîne', '_blank')">
+            <span>Faire une publicité</span>
+            <i class="fas fa-bullhorn"></i>
+        </button>
+        <button class="small-button" id="btn3" onclick="window.open('https://wa.me/2250143692215?text=J%27aimerais%20en%20savoir%20davantage%20sur%20la%20création,%20le%20devis%20et%20le%20droit%20de%20diffusion', '_blank')">
+            <span>Créer une émission</span>
+            <i class="fas fa-tv"></i>
+        </button>
+        <button class="small-button" id="btn4" onclick="window.open('https://lawmattertv.taplink.ws/', '_blank')">
+            <span>Télécharger application</span>
+            <i class="fas fa-download"></i>
         </button>
     </div>
 
@@ -158,43 +209,57 @@
 
         setInterval(updateClock, 1000); // Mettre à jour l'heure chaque seconde
 
-        // Grille horaire pour les vidéos programmées (hebdomadaire/mensuelle)
-        const weeklySchedule = {
-            "Monday": [
-                { time: "10:00", videoId: "VIDEO_ID1" },
-                { time: "12:00", videoId: "VIDEO_ID2" }
-            ],
-            "Tuesday": [
-                { time: "10:00", videoId: "VIDEO_ID3" },
-                { time: "14:00", videoId: "VIDEO_ID4" }
-            ],
-              "Friday": [
-                { time: "16:10", videoId: "https://youtube.com/playlist?list=PLKjjURZYdaOBzvY3uL0vbDYXJlibiECvO&si=L7zLTQH_AyryRspv" },
-                { time: "14:00", videoId: "VIDEO_ID4" }
-            ],
-            // Ajoutez des jours supplémentaires et leurs horaires ici
-        };
+        // Fonction d'animation automatique des boutons
+        function animateButtons() {
+            const buttons = [
+                { id: "btn1", delay: 1000 },
+                { id: "btn2", delay: 2000 },
+                { id: "btn3", delay: 3000 },
+                { id: "btn4", delay: 4000 }
+            ];
+
+            buttons.forEach(button => {
+                setTimeout(() => {
+                    const btn = document.getElementById(button.id);
+                    btn.style.opacity = 1;
+                    btn.querySelector('span').style.opacity = 1;
+                    btn.querySelector('i').style.opacity = 1;
+                }, button.delay);
+            });
+        }
+
+        // Démarrer l'animation des boutons au chargement de la page
+        window.onload = animateButtons;
+
+        // Grille horaire pour les vidéos programmées (aujourd'hui samedi)
+        const scheduleForSaturday = [
+            { time: "08:30", videoId: "https://www.youtube.com/embed/?listType=playlist&list=PLKjjURZYdaOArKe7D9AU45x-DjGjXm-hn&autoplay=1&shuffle=1&loop=1&vq=hd2160" },
+            { time: "14:00", videoId: "https://www.youtube.com/embed/VIDEO_ID1" },
+            { time: "16:00", videoId: "https://www.youtube.com/embed/VIDEO_ID2" }
+            // Ajoutez d'autres créneaux ici si nécessaire
+        ];
 
         function getVideoForCurrentTime() {
             const now = new Date();
-            const day = now.toLocaleString('en-US', { weekday: 'long' });
-            const currentTime = now.toTimeString().slice(0, 5); // Format HH:MM
-
-            if (weeklySchedule[day]) {
-                const scheduleForToday = weeklySchedule[day];
-                for (let program of scheduleForToday) {
-                    if (program.time === currentTime) {
-                        const videoURL = `https://www.youtube.com/embed/${program.videoId}?autoplay=1&vq=hd2160`;
-                        document.getElementById("videoPlayer").src = videoURL;
-                        break;
-                    }
+            const currentTime = now.toTimeString().slice(0, 5); // Format HH:MM// Rechercher la vidéo programmée pour l'heure actuelle
+            for (const schedule of scheduleForSaturday) {
+                if (schedule.time === currentTime) {
+                    return schedule.videoId;
                 }
+            }
+            return null; // Aucune vidéo programmée pour l'heure actuelle
+        }
+
+        // Mettre à jour le lecteur vidéo avec la vidéo programmée
+        function updateVideo() {
+            const videoId = getVideoForCurrentTime();
+            if (videoId) {
+                document.getElementById('videoPlayer').src = videoId;
             }
         }
 
-        // Vérification de l'heure pour changer de vidéo chaque minute
-        setInterval(getVideoForCurrentTime, 60000); // Chaque minute
-        getVideoForCurrentTime(); // Vérification initiale au chargement
+        // Mettre à jour la vidéo toutes les minutes
+        setInterval(updateVideo, 60000); // Vérifie chaque minute
     </script>
 </body>
 </html>
