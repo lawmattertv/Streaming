@@ -135,6 +135,7 @@
 
     <div class="video-player">
         <iframe id="videoPlayer" 
+                src="https://www.youtube.com/embed/videoseries?list=PLKjjURZYdaOBzvY3uL0vbDYXJlibiECvO&autoplay=1&controls=0&mute=0&showinfo=0" 
                 allow="autoplay; fullscreen; picture-in-picture; encrypted-media" 
                 allowfullscreen></iframe>
         <div class="clock" id="clock"></div>
@@ -234,32 +235,25 @@
         // Grille horaire pour les vidéos programmées (aujourd'hui samedi)
         const scheduleForSaturday = [
             { time: "08:30", videoId: "https://www.youtube.com/embed/?listType=playlist&list=PLKjjURZYdaOArKe7D9AU45x-DjGjXm-hn&autoplay=1&shuffle=1&loop=1&vq=hd2160" },
-            { time: "14:00", videoId: "https://www.youtube.com/embed/VIDEO_ID1" },
-            { time: "16:00", videoId: "https://www.youtube.com/embed/VIDEO_ID2" }
-            // Ajoutez d'autres créneaux ici si nécessaire
+            { time: "14:00", videoId: "https://www.youtube.com/embed/?listType=playlist&list=PLKjjURZYdaOArKe7D9AU45x-DjGjXm-hn&autoplay=1&shuffle=1&loop=1&vq=hd2160" },
+            { time: "19:00", videoId: "https://www.youtube.com/embed/?listType=playlist&list=PLKjjURZYdaOArKe7D9AU45x-DjGjXm-hn&autoplay=1&shuffle=1&loop=1&vq=hd2160" }
         ];
 
-        function getVideoForCurrentTime() {
+        // Fonction pour vérifier l'heure actuelle et changer la vidéo si nécessaire
+        function checkSchedule() {
             const now = new Date();
-            const currentTime = now.toTimeString().slice(0, 5); // Format HH:MM// Rechercher la vidéo programmée pour l'heure actuelle
-            for (const schedule of scheduleForSaturday) {
-                if (schedule.time === currentTime) {
-                    return schedule.videoId;
+            const currentTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            for (const entry of scheduleForSaturday) {
+                if (entry.time === currentTime) {
+                    document.getElementById('videoPlayer').src = entry.videoId;
+                    break;
                 }
             }
-            return null; // Aucune vidéo programmée pour l'heure actuelle
         }
 
-        // Mettre à jour le lecteur vidéo avec la vidéo programmée
-        function updateVideo() {
-            const videoId = getVideoForCurrentTime();
-            if (videoId) {
-                document.getElementById('videoPlayer').src = videoId;
-            }
-        }
-
-        // Mettre à jour la vidéo toutes les minutes
-        setInterval(updateVideo, 60000); // Vérifie chaque minute
+        // Vérifie le programme toutes les minutes
+        setInterval(checkSchedule, 60000);
     </script>
 </body>
 </html>
